@@ -1,0 +1,34 @@
+The report should include:
+- description of dataset structure,
+- identification of observed objects,
+- summary of detected data issues,
+- description of cleaning steps,
+- explanation of data flow from raw to processed dataset,
+- explanation of the role of the ingestion layer.
+
+
+- Dataset structure:
+timestamp,object_id,temperature,velocity
+2026-03-01T12:00:00,OBJ-001,15.3,7.4
+2026-03-01T12:05:00,OBJ-002,14.9,7.2
+2026-03-01T12:10:00,OBJ-003,15.1,7.5
+2026-03-01T12:15:00,OBJ-001,15.4,7.6
+2026-03-01T12:20:00,OBJ-004,INVALID,7.8
+
+
+- identification of observed objects:
+there are 4 objects:
+    OBJ-001
+    OBJ-002
+    OBJ-003
+    OBJ-004
+
+
+- summary of detected data issues:
+object with id "OBJ-004" has INVALID as its temperature
+
+
+- description of cleaning steps:
+    - find the records with issues
+    - cut them from dataset and paste into "processed" file
+
