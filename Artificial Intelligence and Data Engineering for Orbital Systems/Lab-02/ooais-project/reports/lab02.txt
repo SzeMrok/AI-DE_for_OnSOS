@@ -1,0 +1,130 @@
+1.
+
+head -n 1 orbital_observations.csv
+timestamp,object_id,temperature,velocity,altitude,signal_strength,sensor_status,anomaly_flag
+
+
+head -n 1 orbital_observations.csv | tr -cd ',' | wc -c
+7
+but since it counts commas, then it should be 8
+
+
+head -n 2 orbital_observations.csv | tail -n 1
+2026-03-01 12:00:00,OBJ-005,15.77,7.06,464,0.98,OK,0
+
+head -n 3 orbital_observations.csv | tail -n 1
+2026-03-01 12:05:00,OBJ-005,14.94,7.28,448,0.84,OK,0
+
+tail -n 2 orbital_observations.csv | head -n 1
+2026-03-03 05:30:00,OBJ-004,18.819514997340818,7.3,570,0.5504117959553989,DEGRADED,1
+
+
+
+2.
+
+wc -l orbital_observations.csv
+501 orbital_observations.csv
+
+
+---------------
+
+
+
+3.
+
+head -n 1 orbital_observations.csv | cut -d ',' -f2
+object_id
+
+
+cut -d ',' -f2 orbital_observations.csv
+object_id
+OBJ-005
+...
+
+
+cut -d ',' -f2,3 orbital_observations.csv
+
+
+in my opinion those columns could be used as input features for ML model: 
+temperature, velocity, altitude, signal_strength
+
+
+in my opinion those columns could be a target variables: 
+temperature, velocity
+
+
+
+4.
+
+cut -d ',' -f2 orbital_observations.csv
+
+
+cut -d ',' -f2 orbital_observations.csv | sort | uniq
+OBJ-001
+OBJ-002
+OBJ-003
+OBJ-004
+OBJ-005
+object_id
+
+
+cut -d ',' -f2 orbital_observations.csv | sort | uniq -c
+     90 OBJ-001
+     97 OBJ-002
+    100 OBJ-003
+    113 OBJ-004
+    100 OBJ-005
+      1 object_id
+
+
+cut -d ',' -f2 orbital_observations.csv | sort | uniq -c | sort
+      1 object_id
+     90 OBJ-001
+     97 OBJ-002
+    100 OBJ-003
+    100 OBJ-005
+    113 OBJ-004
+
+very frequent objects are OBJ-004 (113), OBJ-005 and OBJ-003 (both have 100 occurences)
+
+the most rare are OBJ-001 (90) and OBJ-002 (97)
+
+
+
+5.
+
+grep INVALID orbital_observations.csv
+
+
+grep INVALID orbital_observations.csv | wc -l
+30
+
+
+the INVALID records appear everywhere randomly
+
+
+2026-03-01 18:50:00,OBJ-001,INVALID,7.7,598,0.81,OK,0
+2026-03-01 19:20:00,OBJ-003,INVALID,7.65,538,0.89,OK,0
+2026-03-01 23:30:00,OBJ-003,INVALID,7.45,451,0.73,OK,0
+2026-03-01 23:55:00,OBJ-003,INVALID,7.35,577,0.74,OK,1
+2026-03-02 00:50:00,OBJ-004,INVALID,7.69,444,0.95,OK,0
+2026-03-02 01:25:00,OBJ-002,INVALID,7.92,454,0.78,OK,0
+2026-03-02 01:55:00,OBJ-002,INVALID,7.77,555,0.95,OK,0
+2026-03-02 02:40:00,OBJ-001,INVALID,7.93,523,0.77,OK,0
+
+
+?
+
+
+
+6.
+
+cut -d ',' -f3 orbital_observations.csv
+
+
+cut -d ',' -f3 orbital_observations.csv | sort -n
+
+min is 14.0 and max is 20.50841799679463
+
+
+

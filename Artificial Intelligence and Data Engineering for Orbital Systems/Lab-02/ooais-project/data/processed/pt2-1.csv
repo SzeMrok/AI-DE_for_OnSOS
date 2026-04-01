@@ -1,0 +1,4 @@
+timestamp,object_id,temperature,velocity
+2026-03-01T12:00:00,OBJ-001,15.3,7.4
+2026-03-01T12:15:00,OBJ-001,15.4,7.6
+2026-03-01T12:20:00,OBJ-004,INVALID,7.8
