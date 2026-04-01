@@ -1,0 +1,131 @@
+1. directory structure
+
+.
+└── Artificial Intelligence and Data Engineering for Orbital Systems/
+    ├── Lab-01/
+    │   └── ooais-project/
+    │       ├── data/
+    │       │   ├── processed/
+    │       │   │   ├── final.csv
+    │       │   │   ├── observations_clean.csv
+    │       │   │   ├── pt2-1.csv
+    │       │   │   ├── pt2-2.csv
+    │       │   │   └── tmp.csv
+    │       │   └── raw/
+    │       │       └── observations.csv
+    │       ├── experiments/
+    │       ├── reports/
+    │       │   └── lab01_report.txt
+    │       ├── results/
+    │       └── src/
+    │           ├── features/
+    │           ├── inference/
+    │           ├── ingestion/
+    │           │   ├── load_data.py
+    │           │   └── pt3.py
+    │           ├── models/
+    │           ├── monitoring/
+    │           └── preprocessing/
+    └── Lab-02/
+
+
+2. dataset file listings
+processed:
+- final.csv
+- observations_clean.csv
+- pt2-1.csv
+- pt2-2.csv
+- tmp.csv
+
+raw:
+- observations.csv
+
+
+3. results of search and count commands:
+
+$ wc -l data/raw/observations.csv
+5 data/raw/observations.csv
+
+$ cut -d',' -f2 data/raw/observations.csv | sort | uniq
+OBJ-001
+OBJ-002
+OBJ-003
+OBJ-004
+object_id
+
+$ cut -d',' -f2 data/raw/observations.csv | sort | uniq -c
+  2 OBJ-001
+  1 OBJ-002
+  1 OBJ-003
+  1 OBJ-004
+  1 object_id
+
+$ cut -d',' -f3 data/raw/observations.csv | sort -n | tail -l
+INVALID
+temperature
+14.9
+15.1
+15.3
+15.4
+
+$ awk -F',' '$3 > 15.2' data/raw/observations.csv
+timestamp,object_id,temperature,velocity
+2026-03-01T12:00:00,OBJ-001,15.3,7.4
+2026-03-01T12:15:00,OBJ-001,15.4,7.6
+2026-03-01T12:20:00,OBJ-004,INVALID,7.8
+
+$ grep INVALID data/raw/observations.csv
+2026-03-01T12:20:00,OBJ-004,INVALID,7.8
+
+$ grep -v INVALID data/raw/observations.csv > data/processed/observations_clean.csv
+
+$ python3 src/ingestion/load_data.py
+Number of records: 5
+Objects: {'OBJ-004', 'OBJ-003', 'OBJ-002', 'OBJ-001'}
+
+$ grep "INVALID" data/raw/observations.csv | uniq -c
+  1 2026-03-01T12:20:00,OBJ-004,INVALID,7.8
+
+$ grep -v "INVALID" data/raw/observations.csv
+timestamp,object_id,temperature,velocity
+2026-03-01T12:00:00,OBJ-001,15.3,7.4
+2026-03-01T12:05:00,OBJ-002,14.9,7.2
+2026-03-01T12:10:00,OBJ-003,15.1,7.5
+2026-03-01T12:15:00,OBJ-001,15.4,7.6
+
+$ grep -v "INVALID" data/raw/observations.csv > data/processed/pt2-2.csv
+
+$ touch src/ingestion/pt3.py
+
+
+4. confirmation of permissions:
+test -r "Artificial Intelligence and Data Engineering for Orbital Systems/Lab-01/ooais-project/data/raw/observations.csv" && echo "readable"
+readable
+
+test -w "Artificial Intelligence and Data Engineering for Orbital Systems/Lab-01/ooais-project/data/raw/observations.csv" && echo "writable"
+writable
+
+ls -l "Artificial Intelligence and Data Engineering for Orbital Systems"
+total 8
+drwxr-xr-x 3 szemrok szemrok 4096 Mar 18 18:16 Lab-01
+drwxr-xr-x 2 szemrok szemrok 4096 Mar 18 18:16 Lab-02
+
+
+5. summary of performed tasks:
+- shown workspace and project directory structure
+- listed dataset files in raw and processed folders
+- counted total records in raw observations file (5 records)
+- extracted and analyzed unique object IDs (OBJ-001, OBJ-002, OBJ-003, OBJ-004)
+- analyzed object ID frequency distribution
+- extracted and sorted temperature values from observations
+- filtered records with temperature > 15.2 using awk
+- identified and counted INVALID entries (1 record with INVALID temperature)
+- removed INVALID entries and created clean dataset
+- saved cleaned data to data/processed/pt2-2.csv
+- created src/ingestion/pt3.py file
+- executed Python data loading script and confirmed 5 records with 4 unique objects
+- confirmed read/write permissions for data files
+
+
+6. link / url to repository
+https://github.com/SzeMrok/AI-DE_for_OnSOS
