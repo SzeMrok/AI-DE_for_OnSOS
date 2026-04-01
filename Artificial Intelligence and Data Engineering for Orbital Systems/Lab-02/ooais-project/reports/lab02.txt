@@ -113,7 +113,13 @@ the INVALID records appear everywhere randomly
 2026-03-02 02:40:00,OBJ-001,INVALID,7.93,523,0.77,OK,0
 
 
-?
+grep -n "INVALID" orbital_observations.csv | head -n 1
+
+84:2026-03-01 18:50:00,OBJ-001,INVALID,7.7,598,0.81,OK,0
+
+grep -n "INVALID" orbital_observations.csv | tail -n 1
+
+501:2026-03-03 05:35:00,OBJ-002,INVALID,7.95,498,0.95,OK,0
 
 
 
@@ -127,4 +133,28 @@ cut -d ',' -f3 orbital_observations.csv | sort -n
 min is 14.0 and max is 20.50841799679463
 
 
+for velocity column:
+cut -d ',' -f4 orbital_observations.csv | sort -n
+
+min is 7.0 and max is 8.0
+
+
+don't see any outliers
+
+
+
+7.
+
+cut -d ',' -f8 orbital_observations.csv
+
+
+cut -d ',' -f8 orbital_observations.csv | sort | uniq -c
+    441 0
+     59 1
+
+
+non-anomaly is more frequent
+
+
+anomalous observations are almost 12% of the entire data, so they are rather common
 
