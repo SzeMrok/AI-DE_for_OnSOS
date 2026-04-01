@@ -1,0 +1,68 @@
+1.
+
+$ ls -l data/raw
+total 40
+-rw-r--r-- 1 szemrok szemrok   394 Apr  1 16:57 metadata.json
+-rw-r--r-- 1 szemrok szemrok   228 Apr  1 16:56 observations.csv
+-rw-r--r-- 1 szemrok szemrok 28739 Apr  1 16:56 orbital_observations.csv
+
+
+
+2.
+
+$ cat data/raw/metadata.json 
+{
+  "dataset_name": "orbital_observations",
+  "num_records": 100,
+  "columns": [
+    "timestamp",
+    "object_id",
+    "temperature",
+    "velocity",
+    "altitude",
+    "signal_strength",
+    "sensor_status",
+    "anomaly_flag"
+  ],
+  "feature_columns": [
+    "temperature",
+    "velocity",
+    "altitude",
+    "signal_strength"
+  ],
+  "target_column": "anomaly_flag",
+  "invalid_records": 3
+}
+
+
+
+3.
+
+$ python3 -m json.tool data/raw/metadata.json
+{
+    "dataset_name": "orbital_observations",
+    "num_records": 100,
+    "columns": [
+        "timestamp",
+        "object_id",
+        "temperature",
+        "velocity",
+        "altitude",
+        "signal_strength",
+        "sensor_status",
+        "anomaly_flag"
+    ],
+    "feature_columns": [
+        "temperature",
+        "velocity",
+        "altitude",
+        "signal_strength"
+    ],
+    "target_column": "anomaly_flag",
+    "invalid_records": 3
+}
+
+
+
+4.
+
