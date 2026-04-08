@@ -1,0 +1,11 @@
+Dataset: orbital_observations
+Records loaded: 500
+Expected records: 500
+Column validation: OK
+Record count validation: OK
+Valid records: 470
+Invalid records: 30
+Generated files:
+- data/processed/observations_valid.csv
+- data/processed/observations_invalid.csv
+- data/processed/model_input.csv
