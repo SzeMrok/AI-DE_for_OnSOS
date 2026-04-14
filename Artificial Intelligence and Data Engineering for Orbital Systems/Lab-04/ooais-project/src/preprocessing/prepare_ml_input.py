@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import csv
 
@@ -62,3 +63,81 @@ for record in records_for_processing:
     record['temperature_velocity_interaction'] = record['temperature'] * record['velocity']
     record['altitude_signal_ratio'] = record['altitude'] / (record['signal_strength'] + 0.0001)
     
+print("\n=== ML Input Preparation: Derived Features ===\nNew features added:\n- temperature_velocity_interaction\n- altitude_signal_ratio\n")
+print("Example record (extended):")
+print(records_for_processing[0])
+
+# task 4
+
+for record in records_for_processing:
+    timestamp_value = record.get("timestamp", "")
+    try:
+        hour = datetime.fromisoformat(timestamp_value.replace("Z", "+00:00")).hour
+    except Exception:
+        hour = 0
+
+    record["hour_normalized"] = hour / 24.0
+
+print("\n=== ML Input Preparation: Temporal Features ===\nNew feature added:\n- hour_normalized\n")
+print("Example record (extended):")
+print(records_for_processing[0])
+
+# task 5
+
+selected_features = [
+    "temperature",
+    "velocity",
+    "altitude",
+    "signal_strength",
+    "temperature_velocity_interaction",
+    "altitude_signal_ratio",
+    "hour_normalized"
+]
+
+final_dataset = []
+for record in records_for_processing:
+    final_record = {feature: float(record[feature]) for feature in selected_features}
+    final_dataset.append(final_record)
+
+print("\n=== ML Input Preparation: Feature Selection ===")
+print("Selected features:")
+print("- temperature")
+print("- velocity")
+print("- altitude")
+print("- signal_strength")
+print("- temperature_velocity_interaction")
+print("- altitude_signal_ratio")
+print("- hour_normalized")
+print("Example record (final):")
+print(final_dataset[0])
+
+# task 6
+
+features_output_path = "data/processed/model_features.csv"
+labels_output_path = "data/processed/model_labels.csv"
+
+labels_dataset = []
+for record in records_for_processing:
+    labels_dataset.append({"anomaly_flag": record["anomaly_flag"]})
+
+if len(final_dataset) != len(labels_dataset):
+    raise ValueError("Mismatch between number of feature rows and labels.")
+
+with open(features_output_path, "w", newline="") as f_out:
+    writer = csv.DictWriter(f_out, fieldnames=selected_features)
+    writer.writeheader()
+    writer.writerows(final_dataset)
+
+with open(labels_output_path, "w", newline="") as l_out:
+    writer = csv.DictWriter(l_out, fieldnames=["anomaly_flag"])
+    writer.writeheader()
+    writer.writerows(labels_dataset)
+
+print("\n=== ML Input Preparation: Saving Outputs ===")
+print("Saved file: data/processed/model_features.csv")
+print("Saved file: data/processed/model_labels.csv")
+print(f"Number of records: {len(final_dataset)}")
+print(f"Number of features: {len(selected_features)}")
+print("Example label record:")
+print(labels_dataset[0])
+
