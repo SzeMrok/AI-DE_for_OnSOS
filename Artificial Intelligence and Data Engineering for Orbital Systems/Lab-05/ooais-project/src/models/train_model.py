@@ -1,8 +1,9 @@
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.metrics import accuracy_score, confusion_matrix
 import csv
+import joblib
 
 
 # task 1
@@ -57,7 +58,7 @@ print(f"\n=== Machine Learning: Train/Test Split ===\nTraining samples: {len(tra
 model = DecisionTreeClassifier()
 model.fit(train_split[0], train_split[2])
 
-print(f"\n=== Machine Learning: Model Training ===\nModel: {model}\nTraining completed successfully.")
+print(f"\n=== Machine Learning: Model Training ===\nModel: {model.__class__.__name__}\nTraining completed successfully.")
 
 # task 5
 
@@ -73,4 +74,29 @@ matrix = confusion_matrix(train_split[3], predictions)
 print(f"\n=== Machine Learning: Evaluation ===\nAccuracy: {score:.3f}\nConfusion Matrix:\n{matrix}")
 
 # task 7
+model_path = Path("results/decision_tree_model.joblib")
+joblib.dump(model, model_path)
 
+tree_rules = export_text(model, feature_names=dataset.fieldnames)
+
+print(f"=== Machine Learning: Saving and Inspecting Model ===\nSaved model: {model_path}\nModel type: {model.__class__.__name__}\nTree depth: {model.get_depth()}\nNumber of leaves: {model.get_n_leaves()}\n")
+
+print(tree_rules)
+
+# task 8
+
+mep = Path("results/model_evaluation.txt")
+
+with open(mep, "w") as f:
+    f.write(f"OOAIS Model Evaluation\n======================\n\nModel: {model.__class__.__name__}\nTraining samples: {len(train_split[0])}\nTest samples: {len(train_split[1])}\n\nAccuracy: {score:.3f}\n\nConfusion Matrix:\n{matrix}")
+
+print(f"=== Machine Learning: Saving Evaluation Results ===\nSaved file: {mep}\n")
+
+# task 9
+
+mtsp = Path("reports/model_training_summary.txt")
+
+with open(mtsp, "w") as f:
+    f.write(f"OOAIS Model Training Summary\n============================\n\nInput datasets\n--------------\n{dsfp}\n{lfp}\n\nDataset statistics\n------------------\nNumber of samples: {len(X)}\nNumber of features: {len(dataset.fieldnames)}\n\nModel\n-----\n{model.__class__.__name__}\n\nTrain/Test split\n----------------\nTraining samples: {len(train_split[0])}\nTest samples: {len(train_split[1])}\n\nEvaluation summary\n------------------\nAccuracy: {score:.3f}\nConfusion Matrix:\n{matrix}")
+
+print(f"=== Machine Learning: Saving Training Report ===\nSaved file: {mtsp}")

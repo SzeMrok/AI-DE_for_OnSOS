@@ -1,0 +1,12 @@
+OOAIS Model Evaluation
+======================
+
+Model: DecisionTreeClassifier
+Training samples: 376
+Test samples: 94
+
+Accuracy: 0.989
+
+Confusion Matrix:
+[[80  0]
+ [ 1 13]]
