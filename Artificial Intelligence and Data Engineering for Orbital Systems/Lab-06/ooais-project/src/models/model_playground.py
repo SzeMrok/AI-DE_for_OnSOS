@@ -115,9 +115,64 @@ def define_model() -> dict[str, Any]:
 
 # task 7
 
-def train_models(models: dict[str, Any], X_train, y_train):
+def train_models(models: dict[str, Any], X_train, y_train) -> dict[str, Any]:
+    trained_models = {}
+    print("=== Model Playground: Training Models ===")
     for model_name, model in models.items():
-        model
+        model.fit(X_train, y_train)
+        print(f"{model_name}: trained")
+        trained_models[model_name] = model
+    
+    print("")
+    return trained_models
+
+# task 8
+
+def generate_predictions(trained_models: dict[str, Any], X_test) -> list[dict]:
+    results: list[dict] = []
+    for model_name, model in trained_models.items():
+        y_pred = model.predict(X_test)
+        
+        result = {
+            "name": model_name,
+            "model": model,
+            "y_pred": y_pred
+        }
+        
+        results.append(result)
+        
+    return results
+
+# task 9
+
+def print_example_predictions(prediction_results: list[dict], y_test, num_examples=5):
+    print("=== Model Playground: Example Predictions ===")
+    for i in range(num_examples):
+        line = f"True: {y_test[i]}"
+        
+        for result in prediction_results:
+            model_name = result["name"]
+            y_pred = result["y_pred"]
+            line += f" | {model_name}: {y_pred[i]}"
+            
+        print(line)
+    print("")
+    
+# task 10
+
+def compute_accuracy(prediction_results: list[dict], y_test):
+    print("=== Model Playground: Accuracy Comparison ===")
+    for result in prediction_results:
+        y_pred = result["y_pred"]
+        accuracy = accuracy_score(y_test, y_pred)
+        result["accuracy"] = accuracy
+        print(f"{result['name']}: {accuracy:.4f}")
+    
+    print("")        
+    return prediction_results
+    
+    
+    
 
 
 
@@ -127,5 +182,10 @@ inspect_data(fdf, ldf)
 X, y = prepare_features_and_labels(fdf, ldf)
 X_train, X_test, y_train, y_test = split_data(X, y)  
 models = define_model()
+tr_models = train_models(models, X_train, y_train)
+pred_results = generate_predictions(tr_models, X_test)
+print_example_predictions(pred_results, y_test)
+pred_results = compute_accuracy(pred_results, y_test)
+
 
     
