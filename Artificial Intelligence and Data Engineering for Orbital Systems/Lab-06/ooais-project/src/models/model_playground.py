@@ -1,10 +1,13 @@
 from pathlib import Path
 from typing import Any
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import joblib
 import pandas as pd
 
@@ -160,7 +163,7 @@ def print_example_predictions(prediction_results: list[dict], y_test, num_exampl
     
 # task 10
 
-def compute_accuracy(prediction_results: list[dict], y_test):
+def compute_accuracy(prediction_results: list[dict], y_test) -> list[dict]:
     print("=== Model Playground: Accuracy Comparison ===")
     for result in prediction_results:
         y_pred = result["y_pred"]
@@ -170,9 +173,131 @@ def compute_accuracy(prediction_results: list[dict], y_test):
     
     print("")        
     return prediction_results
-    
-    
-    
+
+# task 11
+
+def compute_detailed_metrics(prediction_results: list[dict], y_test, do_print = True) -> list[dict]:
+    print("=== Model Playground: Detailed Evaluation ===")
+    for result in prediction_results:
+        y_pred = result["y_pred"]
+        cm = confusion_matrix(y_test, y_pred)
+        report = classification_report(y_test, y_pred, output_dict=True)
+        result["confusion_matrix"] = cm
+        result["classification_report"] = report
+        if do_print:
+            print(f"Model: {result['name']}")
+            print(f"Accuracy: {result['accuracy']:.4f}")
+            print("\nConfusion Matrix:")
+            print(result["confusion_matrix"])
+            print("\nClass labels:")
+            print("0 -> normal observation")
+            print("1 -> anomaly")
+            print("\nClassification Report:")
+            print("------------------------------------------------------------")
+            print("Class Precision Recall F1-score Support")
+            print("------------------------------------------------------------")
+            print(
+                f"0 (normal) "
+                f"{report['0']['precision']:.2f} "
+                f"{report['0']['recall']:.2f} "
+                f"{report['0']['f1-score']:.2f} "
+                f"{int(report['0']['support'])}"
+            )
+            print(
+                f"1 (anomaly) "
+                f"{report['1']['precision']:.2f} "
+                f"{report['1']['recall']:.2f} "
+                f"{report['1']['f1-score']:.2f} "
+                f"{int(report['1']['support'])}"
+            )
+            print("------------------------------------------------------------")
+            print(
+                f"Macro average "
+                f"{report['macro avg']['precision']:.2f} "
+                f"{report['macro avg']['recall']:.2f} "
+                f"{report['macro avg']['f1-score']:.2f} "
+                f"{int(report['macro avg']['support'])}"
+            )
+            print(
+                f"Weighted average "
+                f"{report['weighted avg']['precision']:.2f} "
+                f"{report['weighted avg']['recall']:.2f} "
+                f"{report['weighted avg']['f1-score']:.2f} "
+                f"{int(report['weighted avg']['support'])}"
+            )
+    if not do_print:
+        print("Report printing skipped.")
+    return prediction_results
+
+# task 12
+
+def rank_models(evaluation_results):
+    print("\n=== Model Playground: Ranking ===")
+    sorted_results = sorted(
+        evaluation_results,
+        key=lambda result: result["accuracy"],
+        reverse=True
+    )
+    for index, result in enumerate(sorted_results, start=1):
+        print(f"{index}. {result['name']} - {result['accuracy']:.4f}")
+        
+    return sorted_results
+
+# task 13
+
+def define_mod_models() -> dict[str, Any]:
+    print("\n=== Model Playground: Controlled Experiments ===\n")
+    experimental_models = {}
+    for depth in [2, 3, 5]:
+        model = DecisionTreeClassifier(max_depth=depth, random_state=42)
+        experimental_models[f"Decision Tree (max depth={depth})"] = model
+        
+    for n_estimators in [5, 10, 50]:
+        model = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
+        experimental_models[f"Random Forest (n_estimators={n_estimators})"] = model
+        
+    return experimental_models
+
+def plot_model_comparison(model_results: list[dict]) -> None:
+    results_dir = Path(__file__).resolve().parents[2] / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+
+    tree_depths = []
+    tree_accuracies = []
+    forest_trees = []
+    forest_accuracies = []
+
+    for result in model_results:
+        name = result["name"]
+        if "max depth=" in name:
+            tree_depths.append(int(name.split("max depth=")[1].rstrip(")")))
+            tree_accuracies.append(result["accuracy"])
+        elif "n_estimators=" in name:
+            forest_trees.append(int(name.split("n_estimators=")[1].rstrip(")")))
+            forest_accuracies.append(result["accuracy"])
+
+    if tree_depths:
+        plt.figure(figsize=(8, 5))
+        plt.plot(tree_depths, tree_accuracies, marker="o")
+        plt.xlabel("Depth")
+        plt.ylabel("Accuracy")
+        plt.title("Decision Tree accuracy vs depth")
+        plt.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(results_dir / "decision_tree_accuracy_vs_depth.png", dpi=150)
+        plt.close()
+
+    if forest_trees:
+        plt.figure(figsize=(8, 5))
+        plt.plot(forest_trees, forest_accuracies, marker="o")
+        plt.xlabel("Number of trees")
+        plt.ylabel("Accuracy")
+        plt.title("Random Forest accuracy vs number of trees")
+        plt.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(results_dir / "random_forest_accuracy_vs_trees.png", dpi=150)
+        plt.close()
+
 
 
 
@@ -186,6 +311,14 @@ tr_models = train_models(models, X_train, y_train)
 pred_results = generate_predictions(tr_models, X_test)
 print_example_predictions(pred_results, y_test)
 pred_results = compute_accuracy(pred_results, y_test)
+pred_results = compute_detailed_metrics(pred_results, y_test, do_print=False)
+sorted_results = rank_models(pred_results)
+experiment_models = define_mod_models()
+tr_mod_models = train_models(experiment_models, X_train, y_train)
+mod_pred_results = generate_predictions(tr_mod_models, X_test)
+mod_pred_results = compute_accuracy(mod_pred_results, y_test)
+plot_model_comparison(mod_pred_results)
+
 
 
     
