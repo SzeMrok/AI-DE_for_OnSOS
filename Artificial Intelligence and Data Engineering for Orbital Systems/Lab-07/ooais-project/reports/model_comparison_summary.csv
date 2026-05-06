@@ -1,0 +1,5 @@
+model_name,accuracy,training_time_seconds,path
+Random_Forest,0.7500,0.31,models/Random_Forest.joblib
+KNN,0.6944,0.00,models/KNN.joblib
+Logistic_Regression,0.6389,35.41,models/Logistic_Regression.joblib
+SVM,0.7500,0.17,models/SVM.joblib
