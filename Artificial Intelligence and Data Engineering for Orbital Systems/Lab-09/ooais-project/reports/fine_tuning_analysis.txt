@@ -1,0 +1,20 @@
+1. Did fine-tuning improve accuracy?
+Yes (from 0.9167 to 0.9500)
+
+2. Did training become slower?
+Yes, but only for around 0.15 s.
+
+3. Did the confusion matrix change?
+Yes, it recognized forest 19 times instead of 17 times.
+
+4. Did any class improve more than others?
+Only the forest class improved.
+
+5. Did any class become worse?
+No.
+
+6. Is fine-tuning worth the additional computational cost?
+Considering the small amount of additional time in comparison to the overall time it took for training, then yes, it is worth it.
+
+7. Would you use the frozen model or the fine-tuned model in a small-data satellite classification problem?
+For small-data satellite classification problems, I would use the fine-tuned model, as it is only a bit more costly, but performs better.
