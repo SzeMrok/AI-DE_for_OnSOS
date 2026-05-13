@@ -1,0 +1,36 @@
+DATA AUGMENTATION ANALYSIS
+==========================
+
+BASELINE (No Augmentation):
+Final Accuracy: 0.8500
+Training Loss Variance: 0.041410
+Final Epoch Loss: 0.3758
+
+WITH AUGMENTATION:
+Final Accuracy: 0.8167
+Training Loss Variance: 0.029382
+Final Epoch Loss: 0.3851
+
+DID AUGMENTATION IMPROVE ACCURACY?
+NO: -0.0333 (0.8500 -> 0.8167)
+
+DID TRAINING BECOME MORE STABLE?
+YES: 0.041410 to 0.029382
+Augmentation helped smooth training convergence.
+
+WHICH CLASSES IMPROVED THE MOST?
+Per-class accuracy changes:
+  forest: -0.0500 (1.0000 -> 0.9500)
+  residential: -0.2000 (0.9000 -> 0.7000)
+  river: +0.1500 (0.6500 -> 0.8000)
+
+Best improved: river (+0.1500)
+Worst affected: residential (-0.2000)
+
+WHY AUGMENTATION CAN BE USEFUL FOR SATELLITE IMAGERY:
+It can simulate camera angle changes without needing new data
+
+SAVED FILES:
+- Baseline confusion matrix: reports/confusion_baseline.png
+- Augmented confusion matrix: reports/confusion_augmented.png
+- Training loss comparison: reports/training_loss_comparison.png

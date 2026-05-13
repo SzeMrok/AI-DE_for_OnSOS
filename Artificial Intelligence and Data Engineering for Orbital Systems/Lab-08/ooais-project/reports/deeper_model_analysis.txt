@@ -1,0 +1,16 @@
+DEEPER MODEL ANALYSIS
+=====================
+
+Shallow (2 convs): acc=0.9000, time=3.04s, final loss=0.1479
+Deeper (3 convs): acc=0.8000, time=2.65s, final loss=0.2235
+
+DID THE DEEPER MODEL IMPROVE PERFORMANCE?
+Acc diff: -0.1000
+
+DID TRAINING BECOME SLOWER?
+Time ratio deeper/shallow: 0.87x
+
+TRADE-OFF:
+Deeper models may learn better/more features but require more compute and may overfit.
+
+Confusion matrices saved: reports/confusion_shallow.png, reports/confusion_deeper.png

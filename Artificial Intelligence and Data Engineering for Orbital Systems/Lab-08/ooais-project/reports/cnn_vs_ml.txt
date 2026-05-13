@@ -1,0 +1,47 @@
+CNN VS CLASSICAL ML
+===================
+
+CLASSICAL ML:
+Model: Random Forest
+Training time: 0.498s
+Accuracy: 0.8500
+
+CNN:
+Model: Simple CNN
+Training time: ?s
+Accuracy: 0.8667
+
+BETTER ACCURACY:
+CNN (0.8667 vs 0.8500, +0.0167)
+
+FASTER TRAINING:
+Random Forest trained in 0.498s
+CNN training time from original training script ?s
+
+FEWER CLASS CONFUSIONS:
+CNN (8 misclassifications vs 9)
+
+PER-CLASS ACCURACY:
+Random Forest:
+  forest: 0.9000
+  residential: 0.9000
+  river: 0.7500
+
+CNN:
+  forest: 1.0000
+  residential: 0.9000
+  river: 0.7000
+
+GENERALIZATION:
+Random Forest per-class accuracy variance: 0.005000
+CNN per-class accuracy variance: 0.015556
+Random Forest shows more consistent performance (lower variance).
+
+Hardest class for RF: river (0.7500)
+Hardest class for CNN: river (0.7000)
+
+Confusion matrices saved:
+- RF: reports/confusion_rf.png
+- CNN: reports/confusion_cnn.png
+
+Example images saved in reports/

@@ -1,0 +1,16 @@
+TRAIN MORE EPOCHS ANALYSIS
+==========================
+
+Baseline (8 epochs): final accuracy: 0.7833, training time: 1.61s, final loss: 0.4318
+Longer (20 epochs): final accuracy: 0.8667, training time: 2.77s, final loss: 0.2106
+
+DID ACCURACY IMPROVE?
++0.0833 (20 epochs vs 8 epochs)
+
+DID LOSS CONTINUE TO DECREASE?
+Loss 8 final: 0.4318; Loss 20 final: 0.2106
+
+IS MORE TRAINING ALWAYS BETTER?
+Not always - you must look for possible overfitting. Longer training may plateau or overfit.
+
+Saved confusion matrices: reports/confusion_cnn_8epochs.png, reports/confusion_cnn_20epochs.png

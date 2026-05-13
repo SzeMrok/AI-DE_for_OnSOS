@@ -1,0 +1,26 @@
+DATASET REFLECTION
+==================
+
+1. Difference between a flattened image vector and an image tensor
+A flattened image is a 1-D vector while an image tensor keeps channel x height x width.
+
+2. What does a PyTorch Dataset do?
+A Dataset provides access to samples and labels (with indexes) and applies per-sample transforms.
+
+3. What does a DataLoader do?
+DataLoader batches samples, shuffles and loads parallelly, and yields minibatches ready for training.
+
+4. Why are CNNs useful for image data?
+CNNs learn local patterns (edges, textures, shapes) through convolution and pooling.
+
+5. What does the model output before the final class is selected?
+The model outputs scores for each class, which can be then turned into probabilities with softmax.
+
+6. Why can the model classify random or unknown images as one of the known classes?
+Softmax forces a prediction among known classes and the model has no concept of "unknown" or "random" inputs.
+
+7. Why can this behavior be dangerous in real orbital AI systems?
+Overconfident incorrect predictions can cause harmful automated actions, especiall if used in medical district.
+
+8. What would need to be improved before using such a model operationally?
+Add uncertainty estimates, gather more data, validate outputs.
