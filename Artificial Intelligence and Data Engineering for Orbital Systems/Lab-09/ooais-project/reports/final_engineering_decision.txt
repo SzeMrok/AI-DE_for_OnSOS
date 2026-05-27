@@ -1,0 +1,19 @@
+FINAL ENGINEERING DECISION
+=========================
+
+Selected model:
+ResNet18 with fine-tuning
+
+Technical justification:
+ResNet18 fine-tuned achieved 0.9889 test accuracy, outperforming the frozen-transfer and SimpleCNN baselines
+fine-tuning adapts high-level features while keeping pretrained low-level representations
+
+Expected advantages:
+highest accuracy and clearer class separation
+
+Possible risks:
+larger model increases inference cost and can overfit
+
+Deployment considerations:
+make model probabilities reliable and detect unfamiliar/odd images
+monitor predictions and have humans check low-confidence cases

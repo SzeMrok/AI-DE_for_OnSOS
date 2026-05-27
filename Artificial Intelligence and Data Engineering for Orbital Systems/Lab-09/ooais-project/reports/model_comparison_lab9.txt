@@ -1,0 +1,55 @@
+MODEL COMPARISON
+===============
+
+1. SimpleCNN from scratch
+Accuracy: N/A
+Training time: N/A
+Comments: no saved CNN model.
+
+2. ResNet18 frozen feature extractor
+Accuracy: 0.9167
+Training time: 5.32 seconds
+Comments: very high accuracy
+
+3. ResNet18 fine-tuned last block
+Accuracy: 0.9500
+Training time: 5.47 seconds
+Comments: even higher accuracy for ~0.15s more of training
+
+BEST ACCURACY:
+ResNet18 fine-tuned last block - 0.9500
+
+FASTEST TRAINING:
+ResNet18 frozen feature extractor - 5.32 seconds
+
+BEST ENGINEERING TRADE-OFF:
+ResNet18 fine-tuned last block - small additional training time (~0.15s) for a notable accuracy improvement (0.9500 vs 0.9167).
+
+
+after increasing preparation to 300 images:
+MODEL COMPARISON
+===============
+
+1. SimpleCNN from scratch
+Accuracy: 0.8833
+Training time: N/A
+Comments: Trained on increased dataset (300 images/class). Model saved to `models/cnn_model.pt`.
+
+2. ResNet18 frozen feature extractor
+Accuracy: 0.9611
+Training time: 8.94 seconds
+Comments: Trained on increased dataset (300 images/class). Saved report: `reports/transfer_learning_report.txt`.
+
+3. ResNet18 fine-tuned last block
+Accuracy: 0.9889
+Training time: 11.31 seconds
+Comments: Best accuracy after fine-tuning on increased dataset. Saved report: `reports/fine_tuning_report.txt`.
+
+BEST ACCURACY:
+ResNet18 fine-tuned last block - 0.9889
+
+FASTEST TRAINING (recorded):
+ResNet18 frozen feature extractor - 8.94 seconds
+
+BEST ENGINEERING TRADE-OFF:
+ResNet18 fine-tuned last block — higher accuracy (0.9889) at the cost of longer training (11.31s vs 8.94s).

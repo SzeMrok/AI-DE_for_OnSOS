@@ -8,8 +8,8 @@ Trainable layers: layer4 and final classifier
 Classes: ['forest', 'residential', 'river']
 Epochs: 8
 Learning rate: 0.001
-Training time: 5.47 seconds
-Test accuracy: 0.9500
+Training time: 11.31 seconds
+Test accuracy: 0.9889
 
 Interpretation:
 The model reused pretrained visual features and trained only a new classifier head for the EuroSAT subset.

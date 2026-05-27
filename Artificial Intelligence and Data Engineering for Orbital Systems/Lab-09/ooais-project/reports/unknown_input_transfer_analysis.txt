@@ -1,0 +1,23 @@
+UNKNOWN INPUT TRANSFER ANALYSIS
+================================
+
+1. Does the transfer model force a known class prediction?
+yes
+
+2. Does it give high confidence on unknown input?
+often, yes
+
+3. Is transfer learning enough for OOD detection?
+no
+
+4. What additional mechanism is needed?
+uncertainty estimation (ensembles/MC dropout).
+
+Observed predictions (using python3 -m src.vision.predict_transfer):
+- data/raw/eurosat/2750/Highway/Highway_1.jpg -> river (confidence 0.7831)
+- data/inference_samples/noise.jpg -> forest (confidence 0.3712)
+ 
+ Observed predictions after adding normalization to the transform:
+ - data/raw/eurosat/2750/Highway/Highway_1.jpg -> river (confidence 0.9761)
+ - data/inference_samples/noise.jpg -> river (confidence 0.5413)
+

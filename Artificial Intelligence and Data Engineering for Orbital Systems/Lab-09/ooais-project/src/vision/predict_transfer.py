@@ -62,7 +62,11 @@ def predict_image(model, class_names, image_path):
     
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
-        transforms.ToTensor()
+        transforms.ToTensor(),
+        transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
     ])
     
     with Image.open(path) as image:
@@ -98,15 +102,17 @@ def predict_image(model, class_names, image_path):
     
 
 def main():
+    # Task 18
+    image_paths = [
+        "data/raw/eurosat/2750/Highway/Highway_1.jpg",
+        "data/inference_samples/noise.jpg",
+    ]
+
     class_names = load_class_names()
     model = load_model(class_names)
-    image_path = "data/processed/images/test/forest/forest_0000.jpg"
-    
-    predict_image(
-        model,
-        class_names,
-        image_path
-    )
+
+    for p in image_paths:
+        predict_image(model, class_names, p)
 
 
 if __name__ == "__main__":
