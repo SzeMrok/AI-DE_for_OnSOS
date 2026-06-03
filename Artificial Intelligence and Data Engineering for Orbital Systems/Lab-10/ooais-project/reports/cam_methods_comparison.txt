@@ -1,0 +1,17 @@
+• Do all CAM methods highlight the same image regions?
+not completely the same, but there are visible similarities
+
+• Which method produces the sharpest visualization?
+in my opinion, GradCAM and HiResCAM have the sharpest visualizations (and both are very similar if not the same)
+
+• Which method produces the smoothest visualization?
+i would say that LayerCAM focuses on the most irregular-shaped blobs, so it is the smoothest one
+
+• Which method appears easiest to interpret?
+i think that GradCAM and HiResCAM are the easiest to interpret, as they focus on the most recognizable features of the images
+
+• Do any methods produce suspicious or unexpected attention?
+all methods focus on the unexpected parts of the images, but i wouldn't call it suspicious
+
+• What does this suggest about relying on only one XAI method?
+different methods focus on slightly different parts (although really similar), so it might be a good idea to use more than one of them while analyzing images

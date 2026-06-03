@@ -37,7 +37,18 @@ Interpretation:
 model most likely recognizes the river images based on the coastline recognition
 
 
-4. example_noise
+4. example_Highway_1
+
+Prediction: river
+Confidence: 0.9292
+
+Observed attention:
+main attention is on the highway itself
+
+Interpretation:
+as the model wasn't provided with examples of highway, it recognized it as a river as it looked the closest to it
+
+5. example_noise
 
 Prediction: forest
 Confidence: 0.6683
@@ -62,4 +73,21 @@ most suspicious (if at all) was the example_river_0000, where it was hard to rec
 not really, but it for sure can improve it
 
 - Why is XAI important in operational systems?
+it allows for better insights and for more clarity when trying to understand the decision flow
+
+
+Final Conclusions:
+- Did the model focus on meaningful regions?
+yes, in most cases it did
+
+- Did Grad-CAM help explain predictions?
+yes
+
+- Did unknown inputs produce suspicious behavior?
+not really, the model was able to recognize the noise as a forest, and the highway as a river, which is not that bad (although in the case of the highway, there was too large confidence)
+
+- Can explainability guarantee correctness?
+no, but it can help improve it
+
+- Why is XAI important in operational Earth Observation systems?
 it allows for better insights and for more clarity when trying to understand the decision flow

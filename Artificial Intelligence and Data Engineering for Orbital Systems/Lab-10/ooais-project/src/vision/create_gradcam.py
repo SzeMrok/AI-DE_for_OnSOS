@@ -10,6 +10,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from pytorch_grad_cam.utils.image import show_cam_on_image
+from pytorch_grad_cam import GradCAM as TorchGradCAM, HiResCAM, EigenCAM, LayerCAM
 
 MODEL_PATH = Path("models/resnet18_transfer.pt")
 CLASS_NAMES_PATH = Path("models/resnet18_classes.txt")
@@ -18,6 +19,7 @@ IMAGE_PATH = Path("data/processed/images/test/river/river_0000.jpg")
 IMAGE_PATH_FOREST = Path("data/processed/images/test/forest/forest_0000.jpg")
 IMAGE_PATH_RESIDENTIAL = Path("data/processed/images/test/residential/residential_0000.jpg")
 IMAGE_PATH_NOISE = Path("data/inference_samples/noise.jpg")
+IMAGE_PATH_HIGHWAY = Path("data/raw/eurosat/2750/Highway/Highway_1.jpg")
 OUTPUT_PATH = Path("reports/gradcam_example.png")
 
 
@@ -72,7 +74,7 @@ def load_image(image_path):
     return image, tensor.unsqueeze(0)
 
 
-class GradCAM:
+class ManualGradCAM:
     def __init__(self, model, target_layer):
         self.model = model
         self.target_layer = target_layer
@@ -150,7 +152,7 @@ def create_heatmap(model, image_tensor):
         outputs = model(image_tensor)
         predicted_class_index = torch.argmax(outputs, dim=1).item()
 
-    cam = GradCAM(model=model, target_layer=model.layer4[-1])
+    cam = ManualGradCAM(model=model, target_layer=model.layer4[-1])
 
     try:
         grayscale_cam = cam.generate(image_tensor, predicted_class_index)
@@ -160,7 +162,7 @@ def create_heatmap(model, image_tensor):
     return grayscale_cam
 
 def visualize(image, heatmap):
-    output_path = Path(f"reports/gradcam_examples/example_{IMAGE_PATH_NOISE.stem}.png")
+    output_path = Path(f"reports/gradcam_examples/example_{IMAGE_PATH_HIGHWAY.stem}.png")
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     image = image.resize((224,224))
@@ -186,12 +188,47 @@ def visualize(image, heatmap):
     plt.savefig(output_path)
     
 
+def create_cam_by_method(model, image_tensor, method_name):
+    target_layers = [model.layer4[-1]]
+    methods = {
+        "GradCAM": TorchGradCAM,
+        "HiResCAM": HiResCAM,
+        "EigenCAM": EigenCAM,
+        "LayerCAM": LayerCAM
+    }
+    cam_class = methods[method_name]
+    cam = cam_class(model=model, target_layers=target_layers)
+    grayscale_cam = cam(input_tensor=image_tensor)
+    return grayscale_cam[0]
+
+
+
+def visualize_multiple_cams(image, heatmaps):
+    image = image.resize((224,224))
+    image_array = (np.array(image).astype(np.float32)/255.0)
+    plt.figure(figsize=(16,8))
+    plt.subplot(2,3,1)
+    plt.imshow(image)
+    plt.title("Original")
+    plt.axis("off")
+    index = 2
+    for method_name, heatmap in heatmaps.items():
+        visualization = show_cam_on_image(image_array, heatmap, use_rgb=True)
+        plt.subplot(2, 3, index)
+        plt.imshow(visualization)
+        plt.title(method_name)
+        plt.axis("off")
+        index += 1
+    plt.tight_layout()
+    output_path = ("reports/gradcam_examples/cam_methods_comparison.png")
+    plt.savefig(output_path)
+    print(f"Saved: {output_path}")
 
 
 def main():
     class_names = (load_class_names())
     model = load_model(class_names)
-    image, tensor = (load_image(IMAGE_PATH_NOISE))
+    image, tensor = (load_image(IMAGE_PATH_HIGHWAY))
     predict(
         model,
         tensor,

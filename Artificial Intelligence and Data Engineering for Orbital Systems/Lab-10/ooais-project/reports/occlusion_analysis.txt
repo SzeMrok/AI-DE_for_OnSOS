@@ -1,0 +1,18 @@
+• Do both methods highlight similar regions?
+yes, they do
+
+• Which explanation appears more localized?
+i'd say that the occlusion method looks more localised but also less precise
+
+• Which explanation appears easier to interpret?
+the occlusion method seems to better align with the river side and thus is easier to interpret for me
+
+• Did both methods identify the river region?
+yes, they did
+
+• What happens for unknown inputs?
+the explanations become more noisy and harder to interpret
+
+• Can one explanation method completely replace another?
+no, all have their strong sides and weaknesses
+
