@@ -1,0 +1,23 @@
+SEGMENTATION ANALYSIS
+=====================
+
+Pixel accuracy: 0.9949
+
+Visual observations:
+segmentation performed really well in general.
+the problem arised when it comes to predict the right figures/borders of classes - squares were pretty rounded and all the borders were slightly deformed.
+
+Most accurate class:
+
+
+Most difficult class:
+
+
+Boundary errors:
+
+
+Small object errors:
+
+
+Engineering conclusions:
+
