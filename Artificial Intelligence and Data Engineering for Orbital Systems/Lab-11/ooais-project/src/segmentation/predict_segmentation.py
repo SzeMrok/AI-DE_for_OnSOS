@@ -8,9 +8,27 @@ from src.segmentation.unet_model import SmallUNet
 
 
 MODEL_PATH = Path("models/small_unet.pt")
-IMAGE_PATH = Path("data/segmentation/images/scene_0000.png")
-MASK_PATH = Path("data/segmentation/masks/scene_0000.png")
-OUTPUT_PATH = Path("reports/segmentation_examples/prediction.png")
+IMAGE_PATHS = [
+    Path("data/segmentation/images/scene_0000.png"),
+    Path("data/segmentation/images/scene_0010.png"),
+    Path("data/segmentation/images/scene_0020.png"),
+    Path("data/segmentation/images/scene_0030.png"),
+    Path("data/segmentation/images/scene_0040.png"),
+]
+MASK_PATHS = [
+    Path("data/segmentation/masks/scene_0000.png"),
+    Path("data/segmentation/masks/scene_0010.png"),
+    Path("data/segmentation/masks/scene_0020.png"),
+    Path("data/segmentation/masks/scene_0030.png"),
+    Path("data/segmentation/masks/scene_0040.png"),
+]
+OUTPUT_PATHS = [
+    Path("reports/segmentation_examples/prediction_1.png"),
+    Path("reports/segmentation_examples/prediction_2.png"),
+    Path("reports/segmentation_examples/prediction_3.png"),
+    Path("reports/segmentation_examples/prediction_4.png"),
+    Path("reports/segmentation_examples/prediction_5.png"),
+]
 NUM_CLASSES = 4
 
 
@@ -54,7 +72,7 @@ def predict_mask(model, image):
     return prediction[0].numpy()
 
 
-def visualize(image, ground_truth, prediction):
+def visualize(image, ground_truth, prediction, output_path):
     gt_rgb = mask_to_rgb(ground_truth)
     pred_rgb = mask_to_rgb(prediction)
     
@@ -76,18 +94,20 @@ def visualize(image, ground_truth, prediction):
     plt.axis("off")
     
     plt.tight_layout()
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(OUTPUT_PATH)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path)
+    plt.close()
     
-    print(f"Saved prediction: {OUTPUT_PATH}")
+    print(f"Saved prediction: {output_path}")
 
 
 def main():
     model = load_model()
-    image = Image.open(IMAGE_PATH).convert("RGB")
-    ground_truth = np.array(Image.open(MASK_PATH), dtype=np.int64)
-    prediction = predict_mask(model, image)
-    visualize(image, ground_truth, prediction)
+    for image_path, mask_path, output_path in zip(IMAGE_PATHS, MASK_PATHS, OUTPUT_PATHS):
+        image = Image.open(image_path).convert("RGB")
+        ground_truth = np.array(Image.open(mask_path), dtype=np.int64)
+        prediction = predict_mask(model, image)
+        visualize(image, ground_truth, prediction, output_path)
 
 
 if __name__ == "__main__":

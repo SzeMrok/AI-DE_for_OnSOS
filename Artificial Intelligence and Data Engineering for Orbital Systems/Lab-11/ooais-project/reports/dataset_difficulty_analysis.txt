@@ -1,0 +1,22 @@
+DATASET DIFFICULTY ANALYSIS
+============================
+
+Changes made:
+- Thinner water regions (width reduced from 15 to 6 pixels)
+- Smaller urban blocks (size reduced from 12x12 to 6x6 pixels)
+- More RGB noise (range increased from +-15 to +-30)
+
+Original pixel accuracy: 0.9949
+New pixel accuracy: 0.9965
+
+Did pixel accuracy decrease?
+no
+
+Which class became harder?
+urban became clearly harder.
+
+Did small structures become more difficult?
+yes, smaller urban blocks and thinner water strips were harder to segment accurately.
+
+What does this suggest about real Earth Observation data?
+real earth observation data is much harder than those simple made up scenes because it contains irregular shapes, less perfect borders, and overall it is much more complex.

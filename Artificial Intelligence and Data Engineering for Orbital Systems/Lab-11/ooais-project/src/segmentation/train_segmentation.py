@@ -14,6 +14,8 @@ IMAGE_DIR = Path("data/segmentation/images")
 MASK_DIR = Path("data/segmentation/masks")
 MODEL_PATH = Path("models/small_unet.pt")
 REPORT_PATH = Path("reports/segmentation_report.txt")
+CLASS_WISE_REPORT_PATH = Path("reports/class_wise_accuracy.txt")
+CLASS_NAMES = ["background", "vegetation", "water", "urban"]
 
 BATCH_SIZE = 8
 EPOCHS = 10
@@ -88,6 +90,8 @@ def evaluate_model(model, test_loader, device):
     model.eval()
     correct_pixels = 0
     total_pixels = 0
+    class_correct = torch.zeros(NUM_CLASSES)
+    class_total = torch.zeros(NUM_CLASSES)
     with torch.no_grad():
         for images, masks in test_loader:
             images = images.to(device)
@@ -96,19 +100,52 @@ def evaluate_model(model, test_loader, device):
             predictions = torch.argmax(outputs, dim=1)
             correct_pixels += (predictions == masks).sum().item()
             total_pixels += masks.numel()
+            for class_id in range(NUM_CLASSES):
+                class_mask = masks == class_id
+                class_correct[class_id] += (predictions[class_mask] == class_id).sum().item()
+                class_total[class_id] += class_mask.sum().item()
     
     accuracy = (correct_pixels / total_pixels)
+    class_accuracies = {}
+    for class_id in range(NUM_CLASSES):
+        if class_total[class_id] > 0:
+            class_accuracies[class_id] = class_correct[class_id] / class_total[class_id]
+        else:
+            class_accuracies[class_id] = 0.0
     
     print("=== Segmentation Evaluation ===")
     print(f"Pixel accuracy: {accuracy:.4f}")
+    for class_id, class_name in enumerate(CLASS_NAMES):
+        print(f"{class_name} accuracy: {class_accuracies[class_id]:.4f}")
     
-    return accuracy
+    return accuracy, class_accuracies
 
 
 def save_model(model):
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
     torch.save(model.state_dict(), MODEL_PATH)
     print(f"Saved model: {MODEL_PATH}")
+
+
+def save_class_wise_report(accuracy, class_accuracies):
+    best_class_id = max(class_accuracies, key=class_accuracies.get)
+    worst_class_id = min(class_accuracies, key=class_accuracies.get)
+    CLASS_WISE_REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(CLASS_WISE_REPORT_PATH, "w") as f:
+        f.write("CLASS-WISE PIXEL ACCURACY\n")
+        f.write("=========================\n\n")
+        f.write(f"Global pixel accuracy: {accuracy:.4f}\n\n")
+        for class_id, class_name in enumerate(CLASS_NAMES):
+            f.write(f"{class_name}: {class_accuracies[class_id]:.4f}\n")
+        f.write("\nWhich class achieved the best accuracy?\n")
+        f.write(f"{CLASS_NAMES[best_class_id]} ({class_accuracies[best_class_id]:.4f})\n\n")
+        f.write("Which class achieved the worst accuracy?\n")
+        f.write(f"{CLASS_NAMES[worst_class_id]} ({class_accuracies[worst_class_id]:.4f})\n\n")
+        f.write("Is global pixel accuracy misleading?\n")
+        f.write("\n\n")
+        f.write("Why are small classes often harder to evaluate?\n")
+        f.write("\n\n")
+    print(f"Saved report: {CLASS_WISE_REPORT_PATH}")
 
 
 def save_report(accuracy):
@@ -138,10 +175,11 @@ def main():
     model = SmallUNet(num_classes=NUM_CLASSES)
     model = model.to(device)
     train_model(model, train_loader, device)
-    accuracy = evaluate_model(model, test_loader, device)
+    accuracy, class_accuracies = evaluate_model(model, test_loader, device)
     
     save_model(model)
     save_report(accuracy)
+    save_class_wise_report(accuracy, class_accuracies)
 
 
 if __name__ == "__main__":

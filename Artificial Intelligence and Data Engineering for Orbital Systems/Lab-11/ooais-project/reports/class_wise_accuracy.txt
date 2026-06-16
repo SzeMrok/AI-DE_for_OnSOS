@@ -1,0 +1,21 @@
+CLASS-WISE PIXEL ACCURACY
+=========================
+
+Global pixel accuracy: 0.9965
+
+background: 0.9979
+vegetation: 0.9961
+water: 0.9977
+urban: 0.9375
+
+Which class achieved the best accuracy?
+background (0.9979)
+
+Which class achieved the worst accuracy?
+urban (0.9375)
+
+Is global pixel accuracy misleading?
+yes, global pixel accuracy can hide poor performance on rare classes because background pixels dominate the image.
+
+Why are small classes often harder to evaluate?
+small classes contain fewer pixels, so each mistake has a larger impact on their accuracy and they are easier to miss or confuse at boundaries.

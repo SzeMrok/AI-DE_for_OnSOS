@@ -54,30 +54,30 @@ def create_scene(index):
     # water region
     river_x = random.randint(40, 80)
     image_draw.rectangle(
-        [river_x, 0, river_x + 15, IMAGE_SIZE],
+        [river_x, 0, river_x + 6, IMAGE_SIZE],
         fill=CLASS_COLORS[2]
     )
     mask_draw.rectangle(
-        [river_x, 0, river_x + 15, IMAGE_SIZE],
+        [river_x, 0, river_x + 6, IMAGE_SIZE],
         fill=2
     )
     
     # urban blocks
     for _ in range(5):
-        ux = random.randint(0, IMAGE_SIZE - 20)
-        uy = random.randint(0, IMAGE_SIZE - 20)
+        ux = random.randint(0, IMAGE_SIZE - 10)
+        uy = random.randint(0, IMAGE_SIZE - 10)
         image_draw.rectangle(
-            [ux, uy, ux + 12, uy + 12],
+            [ux, uy, ux + 6, uy + 6],
             fill=CLASS_COLORS[3]
         )
         mask_draw.rectangle(
-            [ux, uy, ux + 12, uy + 12],
+            [ux, uy, ux + 6, uy + 6],
             fill=3
         )
         
-    # add slight RGB noise
+    # add RGB noise
     image_array = np.array(image).astype(np.int16)
-    noise = np.random.randint(-15, 16, image_array.shape)
+    noise = np.random.randint(-30, 31, image_array.shape)
 
     image_array = np.clip(
         image_array + noise,

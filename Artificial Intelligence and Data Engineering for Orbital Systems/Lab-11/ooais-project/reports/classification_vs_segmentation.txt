@@ -1,0 +1,20 @@
+CLASSIFICATION VS SEGMENTATION
+==============================
+
+What does classification output?
+classification outputs one label for the entire image, for example river, forest, or residential area.
+
+What does segmentation output?
+segmentation outputs a class label for every pixel in the image, producing a full segmentation mask.
+
+Which task is more suitable for land-cover mapping?
+semantic segmentation is more suitable because it shows where each land-cover class is located across the scene.
+
+Which task is more suitable for quick scene categorization?
+image classification is more suitable because it gives a fast overall scene label.
+
+Why is segmentation more computationally demanding?
+segmentation must predict a label for each pixel instead of one label per image.
+
+How could segmentation support mission operations?
+segmentation can support mission operations by detecting water bodies, urban areas, vegetation, etc. at pixel level, helping with decision making and planning.

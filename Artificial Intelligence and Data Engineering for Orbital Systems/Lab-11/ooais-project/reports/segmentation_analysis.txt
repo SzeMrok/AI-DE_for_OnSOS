@@ -8,16 +8,16 @@ segmentation performed really well in general.
 the problem arised when it comes to predict the right figures/borders of classes - squares were pretty rounded and all the borders were slightly deformed.
 
 Most accurate class:
-
+the water class
 
 Most difficult class:
-
+the urban class
 
 Boundary errors:
-
+the boundaries weren't as perfectly sharp
 
 Small object errors:
-
+small objects were the most deformed ones
 
 Engineering conclusions:
-
+the model isn't perfect but it does its job instead of outputing a completely random result.
